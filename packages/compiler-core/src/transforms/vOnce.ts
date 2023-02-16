@@ -11,10 +11,11 @@ export const transformOnce: NodeTransform = (node, context) => {
       return
     }
     seen.add(node)
-    context.inVOnce = true
     context.helper(SET_BLOCK_TRACKING)
+    context.helper(SET_BLOCK_TRACKING)
+    const currentInVOnce = context.inVOnce // 存储之前的状态
     return () => {
-      context.inVOnce = false
+      context.inVOnce = currentInVOnce
       const cur = context.currentNode as ElementNode | IfNode | ForNode
       if (cur.codegenNode) {
         cur.codegenNode = context.cache(cur.codegenNode, true /* isVNode */)
